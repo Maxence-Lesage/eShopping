@@ -1,5 +1,5 @@
 {
-  "name": "eShopping",
+  "name": "eshopping",
   "private": true,
   "scripts": {
     "build": "turbo build",
