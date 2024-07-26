@@ -1,13 +1,14 @@
 const mysql = require('mysql2');
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
+  connectionLimit: 10,
   host: 'localhost',
   user: 'root',
   password: 'pass475sqlg',
-  database: 'eshopping'
+  database: 'e_shopping'
 });
 
-connection.connect((err) => {
+pool.getConnection((err) => {
   if (err) {
     console.error('Erreur de connexion à la base de données:', err);
     return;
@@ -15,4 +16,4 @@ connection.connect((err) => {
   console.log('Connecté à la base de données MySQL.');
 });
 
-module.exports = connection;
+module.exports = pool;

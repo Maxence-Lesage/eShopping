@@ -1,17 +1,27 @@
 var express = require('express');
 var router = express.Router();
-const path = require('path');
+const bcrypt = require('bcryptjs');
+const db = require('../db')
 
-/* GET users listing. */
-router.get('/:name', function (req, res, next) {
-  next(404)
-  res.render('index', { title: req.params.name });
-});
-// const imagePath = path.join(process.cwd(), 'public', 'images', 'pasateto.jpg');
-// res.sendFile(imagePath);
-
-router.delete('/', function (req, res, next) {
-  res.send('all the users has been deleted')
+/* Create a new user */
+router.post('/register', async function (req, res, next) {
+  const { username, email, password } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    db.query('INSERT INTO users (email, password, username) VALUES (?, ?, ?)', [email, hashedPassword, username], (err) => {
+      if (err) {
+        if (err.errno === 1062) {
+          res.status(409).json({ error: 'The email already exist on the server' });
+          return;
+        }
+        res.status(500).json({ error: 'Error registering user' });
+        return;
+      }
+      res.status(201).json({ success: 'You\'re account has been created' });
+    })
+  } catch (error) {
+    res.status(500).json({ error: 'Error registering user' });
+  }
 })
 
 module.exports = router;
