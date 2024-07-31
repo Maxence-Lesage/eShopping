@@ -10,29 +10,35 @@ export default function Home() {
   const [data, setData] = useState() as any;
   const [dataImg, setDataImg] = useState() as any;
 
-  function deleteU() {
-    const res = deleteUs()
-    setData(res)
-  }
+  // function deleteU() {
+  //   const res = deleteUs()
+  //   setData(res)
+  // }
+  const json = { email: 'nanami@yahoo.com', password: 'magicwaysmyfriend' };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch('http://localhost:3001/users');
-  //       console.log(response);
-  //       setDataImg(response);
-  //     } catch (error) { console.log("error"); }
-  //   }
-
-  // fetchData();
-  // return await fetch('http://localhost:3001/users', { method: 'GET' }).then(res => { return res })
-  // }, [])
+  useEffect(() => {
+    fetch('http://localhost:3001/users/login', {
+      method: 'POST',
+      credentials: 'include', // inclure les cookies
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(json)
+    }).then(response => {
+      if (response.ok) {
+        console.log('Cookie should be set');
+        setData("COOKIES");
+      }
+    }).catch(error => {
+      console.error('Error:', error);
+    });
+  }, [])
 
 
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <button onClick={() => deleteU()} className="size-[100px] bg-green-300/70">DELETE</button>
+        {/* <button onClick={() => deleteU()} className="size-[100px] bg-green-300/70">DELETE</button> */}
         <p>{data}</p>
         {/* <img src="http://localhost:3001/users" /> */}
       </main>
