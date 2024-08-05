@@ -1,10 +1,9 @@
-"use server"
 
 const donnees = { email: 'nanami@yahoo.com', password: 'magicwaysmyfriend' };
 export async function deleteUs() {
   const res = await fetch('http://localhost:3001/users/login', {
     method: 'POST',
-    credentials: 'include',
+    credentials: 'same-origin',
     headers: {
       "Content-Type": "application/json",
     },
@@ -16,13 +15,9 @@ export async function deleteUs() {
 }
 
 export async function tabi() {
-  const res = await fetch('http://localhost:3001/users/protected', {
-    method: 'POST',
+  const res = await fetch('http://localhost:3002/users/protected', {
+    method: 'GET',
     credentials: 'include',
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ message: "darkness is my destiny" })
   })
   const data = await res.text();
   return data;

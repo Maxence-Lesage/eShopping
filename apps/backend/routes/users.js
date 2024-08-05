@@ -37,15 +37,15 @@ router.post('/login', async function (req, res, next) {
       const isMatch = bcrypt.compare(password, resDB[0].password);
       if (!isMatch) { res.status(401).json({ error: "Invalid credentials" }); return };
       const token = jwt.sign({ userId: resDB[0].id }, 'Ad8r5RE41Gf4ha942R4Z', { expiresIn: '1h' });
-      res.status(201).cookie('token', token, { domain: 'localhost', maxAge: 3600 * 60, httpOnly: true }).send();
+      res.status(201).cookie('token', token, { domain: 'localhost', maxAge: 3600 * 60 * 3600, httpOnly: true, secure: false, sameSite: 'strict' }).send();
     });
   } catch (error) {
     res.status(500).json({ error: "Error during server connection" })
   }
 })
 
-router.post('/protected', function (req, res, next) {
-  console.log(req.body);
+router.get('/protected', function (req, res, next) {
+  // console.log(req);
   console.log(req.cookies);
   console.log(req.signedCookies);
   auth(req, res, next);
